@@ -18,6 +18,7 @@ workflow: &workflow
 libs/architectures/:
   - *workflow
   - 'libs/architectures/**'
+  - 'ml4gw/**'
 libs/analysis:
   - *workflow
   - 'libs/analysis/**'
