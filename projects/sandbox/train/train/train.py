@@ -219,14 +219,6 @@ def main(
     whitener = preprocessor.Whitener(fduration, sample_rate)
     whitener = whitener.to(device)
 
-    # TODO: don't hardcode this 1, what do we want to call it?
-    background_length = kernel_length - (fduration + 1)
-    psd_estimator = structures.PsdEstimator(
-        background_length, sample_rate, fftlength=2, fast=highpass is not None
-    )
-    whitener = preprocessor.LocalWhitener(fduration, sample_rate)
-    whitener = whitener.to(device)
-
     # load our waveforms and build some objects
     # for augmenting their snrs
     waveforms, valid_waveforms = train_utils.get_waveforms(
