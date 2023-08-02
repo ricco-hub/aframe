@@ -279,6 +279,7 @@ def main(
         alpha=snr_alpha,
         decay_steps=snr_decay_steps,
     )
+
     cross, plus = waveforms.transpose(1, 0, 2)
     augmentor = AframeBatchAugmentor(
         ifos,
