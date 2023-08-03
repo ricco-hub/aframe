@@ -40,3 +40,6 @@ url = "https://download.pytorch.org/whl/cpu"
 [build-system]
 requires = ["poetry>=1.2"]
 build-backend = "poetry.masonry.api"
+
+[tool.pinto]
+append_base_ld_library_path = true

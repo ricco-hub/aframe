@@ -9,6 +9,7 @@ from bokeh.models import Div, MultiChoice, TabPanel, Tabs
 from vizapp.pages import AnalysisPage, PerformanceSummaryPage
 
 from aframe.analysis.ledger.events import EventSet, RecoveredInjectionSet
+from aframe.analysis.ledger.injections import InjectionParameterSet
 
 if TYPE_CHECKING:
     import torch
@@ -63,14 +64,14 @@ class VizApp:
 
         # load results and data from the run we're visualizing
         self.response_path = data_directory / "test" / "waveforms.h5"
-        # rejected = data_directory / "test" / "rejected-parameters.h5"
+        rejected = data_directory / "test" / "rejected-parameters.h5"
 
         infer_dir = base_directory / "infer"
         self.background = EventSet.read(infer_dir / "background.h5")
         self.foreground = RecoveredInjectionSet.read(
             infer_dir / "foreground.h5"
         )
-        # self.rejected_params = InjectionParameterSet.read(rejected)
+        self.rejected_params = InjectionParameterSet.read(rejected)
 
         # set up our veto selecter and set up the initially
         # blank veto mask, use this to update the sources
