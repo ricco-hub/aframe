@@ -6,7 +6,7 @@ class DataSummaryPage(Page):
     def __init__(self, app):
         super().__init__(app)
         self.param_hist = OneDHistogram(
-            self.app.background, self.app.rejected_params
+            self.app.foreground, self.app.rejected_params
         )
 
     def get_layout(self):

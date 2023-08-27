@@ -8,11 +8,27 @@ from bokeh.plotting import figure, show
 from IPython.display import clear_output
 from ipywidgets import Layout
 
+label = [
+    "mass_1",
+    "mass_2",
+    "redshift",
+    "psi",
+    "a_1",
+    "a_2",
+    "tilt_1",
+    "tilt_2",
+    "phi_12",
+    "phi_jl",
+    "ra",
+    "dec",
+    "theta_jn",
+    "snr",
+]
 output_figure = widgets.Output()
 fig = []
 
 
-class OneDHistogram:
+class TwoDHistogram:
     def __init__(self, foreground: Path, rejected: Path):
         self.foreground = self.load_path(foreground)
         self.rejected = self.load_path(rejected)
@@ -20,8 +36,6 @@ class OneDHistogram:
             k: np.concatenate(((self.foreground[k], self.rejected[k])))
             for k in self.rejected.keys()
         }
-
-        self.labels = list(self.foreground.keys())
 
     def load_path(self, path: Path) -> dict:
         with h5py.File(path, "r") as f:
@@ -36,15 +50,17 @@ class OneDHistogram:
         self.hist_dict_all = self.create_dict(self.all_params)
         self.hist_dict_r = self.create_dict(self.rejected)
 
-    def create_dict(self, data: dict):
+    def create_dict(self, data: dict) -> dict:
         """
         Format: hist_dict[keyname][hist]
                 hist_dict[keyname][edges]
         """
-        hist_dict = {
-            k: np.histogram(data[k], bins=100, density=True)
-            for k in self.labels
-        }
+        for i in label:
+            for j in label:
+                hist_dict = {
+                    k: np.histogram(data[i], data[j], bins=100, density=True)
+                    for k in label
+                }
 
         return hist_dict
 
@@ -67,7 +83,7 @@ class OneDHistogram:
             show(row(fig[0], fig[1], fig[2]))
 
     def get_layout_fore(self, x_var: str, data: dict):
-        title = "Normalized Foreground Distribution of {}".format(x_var)
+        title = "2D Normalized Foreground Distribution of {}".format(x_var)
         hist_dict = self.hist_dict_f
 
         hist = hist_dict[x_var][0]
@@ -90,8 +106,10 @@ class OneDHistogram:
         fig_fore.title.text_font_size = "8pt"
 
     def get_layout_all(self, x_var: str, data: dict):
-        title = "Normalized Foreground + Rejected Distribution of {}".format(
-            x_var
+        title = (
+            "2D Normalized Foreground + Rejected Distribution of {}".format(
+                x_var
+            )
         )
         hist_dict = self.initialize_sources().hist_dict_all
 
@@ -115,7 +133,7 @@ class OneDHistogram:
         fig_all.title.text_font_size = "8pt"
 
     def get_layout_rej(self, x_var: str, data: dict):
-        title = "Normalized Rejected Distribution of {}".format(x_var)
+        title = "2D Normalized Rejected Distribution of {}".format(x_var)
         hist_dict = self.initialize_sources().hist_dict_r
 
         hist = hist_dict[x_var][0]
@@ -138,14 +156,14 @@ class OneDHistogram:
         fig_rej.title.text_font_size = "8pt"
 
     def get_layout(self):
-        x_dropdown_f = widgets.interactive(self.dropdown, x=self.labels)
+        x_dropdown_f = widgets.interactive(self.dropdown, x=label)
         x_dropdown_f.children[0].description = "Foreground"
         x_dropdown_f.children[0].value = "mass_1"
         x_dropdown_f.children[0].layout = Layout(
             width="200px", margin="0px 150px 0px 0px"
         )
 
-        x_dropdown_all = widgets.interactive(self.dropdown, x=self.labels)
+        x_dropdown_all = widgets.interactive(self.dropdown, x=label)
         x_dropdown_all.children[0].description = "Fore + Reject"
         x_dropdown_all.children[0].value = "mass_1"
         x_dropdown_all.children[0].layout = Layout(width="200px")
@@ -153,7 +171,7 @@ class OneDHistogram:
             width="200px", margin="0px 150px 0px 0px"
         )
 
-        x_dropdown_r = widgets.interactive(self.dropdown, x=self.labels)
+        x_dropdown_r = widgets.interactive(self.dropdown, x=label)
         x_dropdown_r.children[0].description = "Reject"
         x_dropdown_r.children[0].value = "mass_1"
         x_dropdown_r.children[0].layout = Layout(width="200px")
