@@ -328,3 +328,17 @@ verbose = true
 integration_length = 1
 # arch parameters
 commands.resnet = "${base.resnet}"
+
+[tool.typeo.scripts.1D_param_hist]
+foreground_file = "${base.basedir}/infer/foreground.h5"
+rejected_params = "${base.basedir}/test/rejected-parameters.h5"
+output_fname = "${base.basedir}/infer/1D_param_hist.html"
+log_file = "${base.basedir}/log/1D_param_hist.log"
+verbose = "${base.verbose}"
+
+[tool.typeo.scripts.2D_param_hist]
+foreground_file = "${base.basedir}/infer/foreground.h5"
+rejected_params = "${base.basedir}/test/rejected-parameters.h5"
+output_fname = "${base.basedir}/infer/2D_param_hist.html"
+log_file = "${base.basedir}/log/2D_param_hist.log"
+verbose = "${base.verbose}"
