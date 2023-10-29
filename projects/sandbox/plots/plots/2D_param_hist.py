@@ -50,9 +50,7 @@ def main(
                 continue
 
             fore = create_figure(labels[x], labels[y], foreground, dist="Fore")
-            rej = create_figure(
-                labels[x], labels[y], rejected_params, dist="Rej"
-            )
+            rej = create_figure(labels[x], labels[y], rejected, dist="Rej")
             all = create_figure(labels[x], labels[y], all_params, dist="All")
 
             fore_plots.append(fore)
